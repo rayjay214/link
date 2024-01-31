@@ -42,7 +42,11 @@ func (server *Server) Serve() error {
 		if err != nil {
 			return err
 		}
-
+                
+                if tcpConn, ok := conn.(*net.TCPConn); ok {
+			tcpConn.SetKeepAlive(false)
+		}
+		
 		go func() {
 			codec, err := server.protocol.NewCodec(conn)
 			if err != nil {
